@@ -7,10 +7,12 @@ import type { RunTimeLayoutConfig } from 'umi';
 import { history, Link } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import { useMsalAuthentication, AuthenticatedTemplate, UnauthenticatedTemplate, } from '@azure/msal-react';
 
-import { MsalProvider, AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 
-import { PageLayout, IdTokenClaims } from "./ui.jsx";
+// import { MsalProvider,  useMsal } from "@azure/msal-react";
+
+// import { PageLayout, IdTokenClaims } from "./ui.jsx";
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -56,6 +58,7 @@ export async function getInitialState(): Promise<{
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
+    
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
@@ -89,6 +92,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       // if (initialState?.loading) return <PageLoading />;
       return (
         <>
+            <AuthenticatedTemplate>
           {children}
           {!props.location?.pathname?.includes('/login') && (
             <SettingDrawer
@@ -103,6 +107,10 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
               }}
             />
           )}
+          </AuthenticatedTemplate>
+            <UnauthenticatedTemplate>
+                <p>You are not signed in! Please sign in.</p>
+            </UnauthenticatedTemplate>
         </>
       );
     },
