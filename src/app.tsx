@@ -7,8 +7,11 @@ import type { RunTimeLayoutConfig } from 'umi';
 import { history, Link } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
-import { MsalProvider } from '@azure/msal-react';
-import { msalInstance } from './authConfig';
+import { PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider } from "@azure/msal-react";
+import { msalConfig } from "./authConfig";
+
+const msalInstance = new PublicClientApplication(msalConfig);
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
