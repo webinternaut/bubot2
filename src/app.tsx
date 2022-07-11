@@ -7,6 +7,21 @@ import type { RunTimeLayoutConfig } from 'umi';
 import { history, Link } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import { Button } from 'antd'
+
+import { loginRequest } from "./authConfig";
+import { PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider } from "@azure/msal-react";
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal, useAccount } from "@azure/msal-react";
+
+
+
+// import { msalConfig } from "./authConfig";
+
+
+// import { MsalProvider,  useMsal } from "@azure/msal-react";
+
+// import { PageLayout, IdTokenClaims } from "./ui.jsx";
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -51,7 +66,9 @@ export async function getInitialState(): Promise<{
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
+
   return {
+    
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
@@ -82,9 +99,16 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     // unAccessible: <div>unAccessible</div>,
     // 增加一个 loading 的状态
     childrenRender: (children, props) => {
+      // const msalInstance = new PublicClientApplication(msalConfig);
+
+      const { instance, accounts } = useMsal();
+      const account = useAccount(accounts[0] || {});
+
       // if (initialState?.loading) return <PageLoading />;
       return (
         <>
+        <MsalProvider instance={msalInstance}>
+
           {children}
           {!props.location?.pathname?.includes('/login') && (
             <SettingDrawer
@@ -99,9 +123,25 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
               }}
             />
           )}
+          </MsalProvider>
+          <div>
+          <div>Hello, world!</div>
+        <AuthenticatedTemplate>
+            <div>
+              Authenticated
+            </div>
+        </AuthenticatedTemplate>
+        <UnauthenticatedTemplate>
+          <Button color="secondary" onClick={() => instance.loginRedirect(loginRequest)}>
+            Sign in
+          </Button>
+        </UnauthenticatedTemplate>
+      </div>
         </>
       );
     },
     ...initialState?.settings,
   };
 };
+
+
