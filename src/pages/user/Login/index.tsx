@@ -19,6 +19,11 @@ import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { FormattedMessage, history, SelectLang, useIntl, useModel } from 'umi';
 import styles from './index.less';
+import {
+  AuthenticatedTemplate,
+  UnauthenticatedTemplate,
+  useMsal,
+} from '@azure/msal-react';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -81,8 +86,31 @@ const Login: React.FC = () => {
   };
   const { status, type: loginType } = userLoginState;
 
+  function WelcomeUser() {
+    const { accounts } = useMsal();
+    const username = accounts[0].username;
+  
+    return <p>Welcome, {username}</p>;
+  }
+
+  function SignInButton() {
+    // useMsal hook will return the PublicClientApplication instance you provided to MsalProvider
+    const { instance } = useMsal();
+  
+    return <button onClick={() => instance.loginRedirect()}>Sign In</button>;
+  }
+
   return (
+    
     <div className={styles.container}>
+      <AuthenticatedTemplate>
+        <p>This will only render if a user is signed-in.</p>
+        <WelcomeUser />
+      </AuthenticatedTemplate>
+      <UnauthenticatedTemplate>
+        <p>This will only render if a user is not signed-in.</p>
+        <SignInButton />
+      </UnauthenticatedTemplate>
       <div className={styles.lang} data-lang>
         {SelectLang && <SelectLang />}
       </div>

@@ -3,6 +3,7 @@ import { Alert, Card, Typography } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'umi';
 import styles from './Welcome.less';
+import { Progress } from 'antd';
 
 const CodePreview: React.FC = ({ children }) => (
   <pre className={styles.pre}>
@@ -17,6 +18,11 @@ const Welcome: React.FC = () => {
 
   return (
     <PageContainer>
+        <>
+    <Progress strokeLinecap="butt" percent={75} />
+    <Progress strokeLinecap="butt" type="circle" percent={75} />
+    <Progress strokeLinecap="butt" type="dashboard" percent={75} />
+  </>
       <Card>
         <Alert
           message={intl.formatMessage({
