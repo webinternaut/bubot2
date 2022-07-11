@@ -135,6 +135,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
           <Button color="secondary" onClick={() => instance.loginRedirect(loginRequest)}>
             Sign in
           </Button>
+          <div> No User logged in.</div>
         </UnauthenticatedTemplate>
       </div>
         </>
