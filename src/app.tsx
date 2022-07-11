@@ -14,7 +14,7 @@ import { msalConfig } from "./authConfig";
 const msalInstance = new PublicClientApplication(msalConfig);
 
 const isDev = process.env.NODE_ENV === 'development';
-const loginPath = '/list/table-list';
+const loginPath = '/list';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -92,7 +92,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         <>
         <MsalProvider instance={msalInstance}>
           {children}
-          {!props.location?.pathname?.includes('/list/table-list') && (
+          {!props.location?.pathname?.includes('/list') && (
             <SettingDrawer
               disableUrlParams
               enableDarkTheme
