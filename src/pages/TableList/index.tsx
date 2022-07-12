@@ -15,6 +15,7 @@ import React, { useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'umi';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
+import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 
 /**
  * @en-US Add node
@@ -243,6 +244,12 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
+                  <AuthenticatedTemplate>
+                <p>At Least One Account Is Signed In!</p>
+            </AuthenticatedTemplate>
+            <UnauthenticatedTemplate>
+                <p>No Users Are Signed In!</p>
+            </UnauthenticatedTemplate>
       <ProTable<API.RuleListItem, API.PageParams>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
